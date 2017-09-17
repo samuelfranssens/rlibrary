@@ -11,11 +11,11 @@
 #' spssanova(lm(y ~ x, data))
 
 spssanova <- function(linearmodelfit) {
-  # initial_contrastcoding <- getOption("contrasts")       # Get the initial contrast coding
+  # initial_contrastcoding <- getOption("contrasts")      # Get the initial contrast coding
   options(contrasts=c("contr.sum","contr.poly"))          # Set contrast coding to contr.sum
   type3anova <- drop1(linearmodelfit,~.,test="F")         # Type III ANOVA
   options(contrasts=c("contr.treatment","contr.poly"))    # Set contrast coding to contr.treatment
-  # options(contrasts=initial_contrastcoding)              # Reset to initial contrast coding
+  # options(contrasts=initial_contrastcoding)             # Reset to initial contrast coding
 
   return(type3anova)
 }

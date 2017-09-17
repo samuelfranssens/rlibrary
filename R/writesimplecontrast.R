@@ -18,7 +18,7 @@
 
 writesimplecontrast <- function(x, y, aovmodel,K,rmd=FALSE,list=FALSE) {
   t <- glht(aovmodel,linfct=K)
-  d <- summary(t)$test$tstat[1] * sqrt(1/Ns[x] +1/Ns[y]) 
+  d <- summary(t)$test$tstat[1] * sqrt(1/Ns[x] +1/Ns[y])
   p <- summary(t)$test$pvalues[1]
   est <- round(confint(t)$confint[1],2)
   lwr <- round(confint(t)$confint[2],2)
@@ -33,12 +33,15 @@ writesimplecontrast <- function(x, y, aovmodel,K,rmd=FALSE,list=FALSE) {
     } else {
       pvalue <- paste(", p = ",round(p,2),sep="")
       if(rmd) { pvalue <- paste(", *p* = ",round(p,2),sep="") }
-    }      
-  }  
+    }
+  }
   df <- Ns[x]+Ns[y]-2
   contrastx <- paste(": ",round(means[x],2)," (SD = ",round(sds[x],2),") vs. ",round(means[y],2)," (SD = ",round(sds[y],2),"), est = ",round(summary(t)$test$coefficients[1],2),", 95% CI [",lwr,"; ",upr,"], t(",df,") = ",round(abs(summary(t)$test$tstat),2),pvalue,", d = ",round(abs(d),2), sep="")
   if (rmd & list) {list=F}
   if(rmd) { contrastx <- paste(": ",round(means[x],2)," (*SD* = ",round(sds[x],2),") vs. ",round(means[y],2)," (*SD* = ",round(sds[y],2),"), *est* = ",round(summary(t)$test$coefficients[1],2),", 95% CI [",lwr,"; ",upr,"], *t*(",df,") = ",round(abs(summary(t)$test$tstat),2),pvalue,", *d* = ",round(abs(d),2), sep="") }
-  if(list){ contrastx <- list(round(means[x],2),round(sds[x],2),round(means[y],2),round(sds[y],2),round(summary(t)$test$coefficients[1],2),lwr,upr,df,round(abs(summary(t)$test$tstat),2),pvalue,round(abs(d),2),Ns[x],Ns[y])}
+  if(list){
+    contrastx <- list(round(means[x],2),round(sds[x],2),round(means[y],2),round(sds[y],2),round(summary(t)$test$coefficients[1],2),lwr,upr,df,round(abs(summary(t)$test$tstat),2),pvalue,round(abs(d),2),Ns[x],Ns[y])
+    names(contrastx) <- c("m1","sd1","m2","sd2","est","lwr","upr","df","t",p,d,n1,n2)
+    }
   return(contrastx)
 }

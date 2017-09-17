@@ -39,6 +39,9 @@ writecontrast <- function(n1,n2,nrofterms,aovmodel,K,rmd=FALSE,list=FALSE) {
   contrastx <- paste(": est = ",round(summary(t)$test$coefficients[1],2),", 95% CI [",lwr,"; ",upr,"], t(",df,") = ",round(abs(summary(t)$test$tstat),2),pvalue,", d = ",round(abs(d),2), sep="")
   if (rmd & list) {list=F}
   if(rmd) { contrastx <- paste(": *est* = ",round(summary(t)$test$coefficients[1],2),", 95% CI [",lwr,"; ",upr,"], *t*(",df,") = ",round(abs(summary(t)$test$tstat),2),pvalue,", *d* = ",round(abs(d),2), sep="") }
-  if(list) { contrastx <- list(round(summary(t)$test$coefficients[1],2),lwr,upr,df,round(abs(summary(t)$test$tstat),2),p,round(abs(d),2))}
+  if(list) { 
+    contrastx <- list(round(summary(t)$test$coefficients[1],2),lwr,upr,df,round(abs(summary(t)$test$tstat),2),p,round(abs(d),2))
+    names(contrastx) <- c("est","lwr","upr","df","t","p","d") 
+    }
   return(contrastx)
 }
