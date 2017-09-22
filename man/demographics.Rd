@@ -18,4 +18,3 @@ dataset$gender can have values 0,1,2,3 or na, male, female, other
 demographics()
 }
 \keyword{demographics}
-

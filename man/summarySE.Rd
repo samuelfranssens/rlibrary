@@ -28,4 +28,3 @@ tgc <- summarySE(tg, measurevar="len", groupvars=c("supp","dose"))
 }
 \keyword{ggplot2}
 \keyword{summary}
-

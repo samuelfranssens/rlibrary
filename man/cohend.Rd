@@ -26,4 +26,3 @@ cohend(d.est, n1, n2, "lwr")
 }
 \keyword{effect}
 \keyword{size}
-

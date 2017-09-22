@@ -28,4 +28,3 @@ RMD trumps list.
 writecontrast()
 }
 \keyword{contrast}
-

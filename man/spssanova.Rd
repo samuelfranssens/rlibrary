@@ -27,4 +27,3 @@ spssanova(lm(y ~ x, data))
 }
 \keyword{anova}
 \keyword{spss}
-

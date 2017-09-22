@@ -17,4 +17,3 @@ mediation.summary()
 }
 \keyword{bootstrap}
 \keyword{mediation}
-

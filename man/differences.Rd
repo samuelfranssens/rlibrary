@@ -26,4 +26,3 @@ This function will give you a confidence interval around a difference and its as
 differences(mean1,mean2,sd1,sd2,n1,n2)
 }
 \keyword{CI}
-

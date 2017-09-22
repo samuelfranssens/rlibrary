@@ -23,4 +23,3 @@ dataset$MID refers to mturk (or other) IDs
 dataset <- remove_duplicates(dataset)
 }
 \keyword{duplicates}
-
