@@ -9,9 +9,15 @@
 #' @examples
 #' boxplot(graph, limits, breaks)
 
-boxplot <- function(box.arg, limits, breaks){
+boxplot <- function(box.arg, y){
+
+  y.min <- floor(min(y))
+  y.max <- ceiling(max(y))
+  limits <- c(y.min-0.5,y.max+0.5)
+  breaks  <-  c(y.min:y.max)
+
   box.arg <- box.arg +
-    scale_y_continuous(limits=as.numeric(limits), breaks = as.numeric(breaks)) +
+    scale_y_continuous(limits=limits, breaks = breaks) +
     geom_boxplot(fill = colors$fill.boxplot, outlier.fill = colors$fill.outlier, outlier.shape = 25, outlier.size = 3) +
     geom_jitter (size = 3, height = 0.1, width = 0.2) +
     theme(axis.title.y = element_text(colour="black", size=13, face="bold"),
@@ -25,4 +31,6 @@ boxplot <- function(box.arg, limits, breaks){
           legend.position="none",
           strip.text = element_text(size = 13, face = "bold"),
           strip.background = element_rect(fill = colors$fill.boxplot))
+
+  return(box.arg)
 }

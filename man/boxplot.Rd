@@ -4,7 +4,7 @@
 \alias{boxplot}
 \title{A helper function for onefactor and twofactor}
 \usage{
-boxplot(box.arg, limits, breaks)
+boxplot(box.arg, y)
 }
 \arguments{
 \item{box.arg}{box.arg}

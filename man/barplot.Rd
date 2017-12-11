@@ -4,7 +4,7 @@
 \alias{barplot}
 \title{A helper function for onefactor and twofactor}
 \usage{
-barplot(bar.arg, limits, breaks)
+barplot(bar.arg, lwr, upr)
 }
 \arguments{
 \item{bar.arg}{box.arg}

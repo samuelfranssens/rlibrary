@@ -9,7 +9,13 @@
 #' @examples
 #' barplot(graph, limits, breaks)
 
-barplot <- function(bar.arg, limits, breaks){
+barplot <- function(bar.arg, lwr, upr){
+
+  y.min <- floor(min(lwr))
+  y.max <- ceiling(max(upr))
+  limits <- c(min(y.min,0),y.max+0.5)
+  breaks <- c(min(y.min,0):y.max)
+
   bar.arg <- bar.arg +
     scale_y_continuous(limits=limits, breaks = breaks) +
     geom_bar(stat="identity", position="dodge", colour="black") +
@@ -27,4 +33,6 @@ barplot <- function(bar.arg, limits, breaks){
           strip.text = element_text(size = 13, face = "bold"),
           strip.background = element_rect(fill = colors$fill.boxplot),
           legend.title = element_blank())
+
+  return(bar.arg)
 }

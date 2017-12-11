@@ -32,26 +32,16 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
 
   # make the graph: boxplot
   if (graph.type == "box"){
-    y.min <- floor(min(y))
-    y.max <- ceiling(max(y))
-    limits <- c(y.min-0.5,y.max+0.5)
-    breaks  <-  c(y.min:y.max)
-
     graph <- ggplot(aes(y = y, x = x1, group = x1), data=dataset) + facet_wrap(~x2)
-    graph <- boxplot(graph, limits, breaks) +
+    graph <- boxplot(graph, y = dataset$y) +
       geom_point(data = text.df, aes(x = x1, y = means), colour=colors$fill.mean, shape=18, size=7) +
       geom_text (data = text.df, aes(x = x1, y = means, label=round(means,2)), colour = colors$text.mean, hjust = -0.8, fontface="bold", size = 5, inherit.aes=FALSE)
   }
 
   # make the graph: barplot
   if (graph.type == "bar"){
-    y.min <- floor(min(text.df$lwr))
-    y.max <- ceiling(max(text.df$upr))
-    limits <- c(min(y.min,0),y.max+0.5)
-    breaks <- c(min(y.min,0):y.max)
-
     graph <- ggplot(aes(y = means, x = x2, ymax=(round(means,0)+1), fill = x1), data = text.df)
-    graph <- barplot(graph, limits, breaks)
+    graph <- barplot(graph, lwr = text.df$lwr, upr = text.df$upr)
     if (levels1 == 3){
       graph <- graph + scale_fill_manual(values = c(colors$bar1,colors$bar2,colors$bar3))
     }
