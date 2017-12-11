@@ -15,14 +15,7 @@ onefactor <- function(y, x1, graph.type = "bar"){
   sds   <- tapply(y,x1,sd)
   n     <- tapply(y,x1,length)
 
-  text.df <- tibble(x1 = levels(as.factor(x1)),
-                    means = as.vector(means),
-                    sd = as.vector(sds),
-                    ns = as.vector(n),
-                    ci = 1.96 * sd / sqrt(ns),
-                    lwr = means - ci,
-                    upr = means + ci)
-
+  text.df <- tibble(x1 = levels(as.factor(x1)),means = as.vector(means),sd = as.vector(sds),ns = as.vector(n),ci = 1.96 * sd / sqrt(ns),lwr = means - ci,upr = means + ci)
   dataset <- as_tibble(cbind(as.factor(x1),as.numeric(y)))
 
   # make the graph: boxplot
@@ -31,13 +24,14 @@ onefactor <- function(y, x1, graph.type = "bar"){
     graph <- boxplot(graph, y = dataset$y)+
       geom_point(data = text.df, aes(x = x1, y = means), colour=colors$fill.mean, shape=18, size=7) +
       geom_text (data = text.df, aes(x = x1, y = means , label=round(means,2)), colour=colors$text.mean, hjust = -0.8, size = 5, fontface="bold", inherit.aes=FALSE)
-  }
+  } # end of boxplot
 
   # make the graph: barplot
   if (graph.type == "bar"){
     graph <- ggplot(aes(y = means, x = x1, ymax=(round(means,0)+1)),data = text.df)
-    graph <- barplot(graph, lwr = text.df$lwr, upr = text.df$upr) + guides(fill = FALSE)
-  }
+    graph <- barplot(graph, lwr = text.df$lwr, upr = text.df$upr) +
+      guides(fill = FALSE)
+  } # end of barplot
 
   # only if the first factor has two levels and a simple contrast can be computed
   if (levels == 2) {

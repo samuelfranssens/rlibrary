@@ -17,17 +17,7 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
   levels1 <- length(levels(factor(x1)))
   levels2 <- length(levels(factor(x2)))
 
-  text.df <- tibble(x1 = rep(levels(as.factor(x1)),levels2),
-                    x2 = rep(levels(as.factor(x2)),each = levels1),
-                    means = as.vector(means),
-                    sd = as.vector(sds),
-                    ns = as.vector(n),
-                    ci = 1.96 * sd / sqrt(ns),
-                    lwr = means - ci,
-                    upr = means + ci,
-                    d = 0,
-                    p = 0)
-
+  text.df <- tibble(x1 = rep(levels(as.factor(x1)),levels2),x2 = rep(levels(as.factor(x2)),each = levels1),means = as.vector(means),sd = as.vector(sds),ns = as.vector(n),ci = 1.96 * sd / sqrt(ns),lwr = means - ci,upr = means + ci,d = 0,p = 0)
   dataset <- as_tibble(cbind(as.factor(x1),as.factor(x2),as.numeric(y)))
 
   # make the graph: boxplot
@@ -36,20 +26,22 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
     graph <- boxplot(graph, y = dataset$y) +
       geom_point(data = text.df, aes(x = x1, y = means), colour=colors$fill.mean, shape=18, size=7) +
       geom_text (data = text.df, aes(x = x1, y = means, label=round(means,2)), colour = colors$text.mean, hjust = -0.8, fontface="bold", size = 5, inherit.aes=FALSE)
-  }
+  } # end of boxplot
 
   # make the graph: barplot
   if (graph.type == "bar"){
     graph <- ggplot(aes(y = means, x = x2, ymax=(round(means,0)+1), fill = x1), data = text.df)
     graph <- barplot(graph, lwr = text.df$lwr, upr = text.df$upr)
+
     if (levels1 == 3){
       graph <- graph + scale_fill_manual(values = c(colors$bar1,colors$bar2,colors$bar3))
     }
-  }
+  } # end of barplot
+
 
   # only if the first factor has two levels and a simple contrast can be computed
   if (levels1 == 2) {
-    for (i in 1:levels2){ # for each level of 2: calculate d & p
+    for (i in 1:levels2){ # for each level of x2: calculate d & p
       # 0 1 = main effect factor 1
       # levels2-1 times zero for main effects factor 2
       # levels2-1 times zero for interactions
@@ -72,11 +64,11 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
       graph <- graph +
         geom_text(data=text.df, aes(x = x2,  y = min(y)+0.2, label=paste("d = ",round(d,2),", p = ",round(p,3),sep="")), color = colors$text.d, fontface="bold", size = 5, inherit.aes=FALSE) +
         scale_fill_manual(values = c(colors$bar1, colors$bar2))
-    }
+    } # end of barplot
     if (graph.type == "box"){
       graph <- graph + geom_text(data=text.df, aes(x = 1.5, y = min(y)+0.2, label=paste("d = ",round(d,2),", p = ",round(p,3),sep="")), color = colors$text.d, fontface="bold", size = 5, inherit.aes=FALSE)
-    }
-  }
+    } # end of boxplot
+  } # end of levels = 2
 
   return(graph)
 }
