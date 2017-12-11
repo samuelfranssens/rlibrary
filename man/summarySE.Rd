@@ -19,7 +19,7 @@ summarySE(data = NULL, measurevar, groupvars = NULL, na.rm = FALSE,
 \item{conf.interval}{the percent range of the confidence interval (default is 95 percent)}
 }
 \description{
-Not my function. 
+Not my function.
 Got it from: http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/
 Requires library(plyr)
 }
