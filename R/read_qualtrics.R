@@ -12,7 +12,8 @@ read_qualtrics <- function(x){
   csv     <- as_tibble(read.csv(x, skip = 3, header = F))
   names(csv) <- names(headers)
 
-  csv <- select(csv , -IPAddress,-Progress,-RecordedDate,-ResponseId,-RecipientLastName,-RecipientFirstName,-RecipientEmail,-ExternalReference,-DistributionChannel,-UserLanguage)
+  require(dplyr)
+  csv <- dplyr::select(csv , -IPAddress,-Progress,-RecordedDate,-ResponseId,-RecipientLastName,-RecipientFirstName,-RecipientEmail,-ExternalReference,-DistributionChannel,-UserLanguage)
   setnames(csv, old = c("StartDate","EndDate","Status","Duration..in.seconds.","Finished","LocationLatitude","LocationLongitude"),
            new = c("start","end","status","duration","finished","latitude","longitude"))
   subject <- 1:length(csv$start)
