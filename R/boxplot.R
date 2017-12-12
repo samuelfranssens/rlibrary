@@ -29,9 +29,7 @@ boxplot <- function(box.arg, y){
           panel.spacing = unit(0.1,"lines"),
           legend.position="none",
           strip.text = element_text(size = 13, face = "bold"),
-          strip.background = element_rect(fill = colors$fill.boxplot)) +
-    geom_point(data = text.df, aes(x = x1, y = means), colour=colors$fill.mean, shape=18, size=7) +
-    geom_text (data = text.df, aes(x = x1, y = means , label=round(means,2)), colour=colors$text.mean, hjust = -0.8, size = 5, fontface="bold", inherit.aes=FALSE)
+          strip.background = element_rect(fill = colors$fill.boxplot))
 
   return(box.arg)
 }
