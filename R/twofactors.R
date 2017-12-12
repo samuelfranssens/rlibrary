@@ -23,7 +23,7 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
   # make the graph: boxplot
   if (graph.type == "box"){
     graph <- ggplot(aes(y = y, x = x1, group = x1), data=dataset) + facet_wrap(~x2)
-    graph <- boxplot(graph, y = dataset$y) +
+    graph <- ggplot2.boxplot(graph, y = dataset$y) +
       geom_point(data = text.df, aes(x = x1, y = means), colour=colors$fill.mean, shape=18, size=7) +
       geom_text (data = text.df, aes(x = x1, y = means , label=round(means,2)), colour=colors$text.mean, hjust = -0.8, size = 5, fontface="bold", inherit.aes=FALSE)
   } # end of boxplot
@@ -31,7 +31,7 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
   # make the graph: barplot
   if (graph.type == "bar"){
     graph <- ggplot(aes(y = means, x = x2, ymax=(round(means,0)+1), fill = x1), data = text.df)
-    graph <- barplot(graph, lwr = text.df$lwr, upr = text.df$upr)
+    graph <- ggplot2.barplot(graph, lwr = text.df$lwr, upr = text.df$upr)
 
     if (levels1 == 3){
       graph <- graph + scale_fill_manual(values = c(colors$bar1,colors$bar2,colors$bar3))

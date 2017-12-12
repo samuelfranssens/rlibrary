@@ -9,7 +9,7 @@
 #' @examples
 #' barplot(graph, limits, breaks)
 
-barplot <- function(bar.arg, lwr, upr){
+ggplot2.barplot <- function(bar.arg, lwr, upr){
 
   y.min <- floor(min(lwr))
   y.max <- ceiling(max(upr))

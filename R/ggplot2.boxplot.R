@@ -8,7 +8,7 @@
 #' @examples
 #' boxplot(graph, limits, breaks)
 
-boxplot <- function(box.arg, y){
+ggplot2.boxplot <- function(box.arg, y){
 
   y.min <- floor(min(y))
   y.max <- ceiling(max(y))
