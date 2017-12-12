@@ -9,9 +9,9 @@ barplot(bar.arg, lwr, upr)
 \arguments{
 \item{bar.arg}{box.arg}
 
-\item{limits}{limits}
+\item{lwr}{lwr end of ci}
 
-\item{breaks}{breaks}
+\item{upr}{upr end of ci}
 }
 \description{
 Use onefactor and twofactor instead of this

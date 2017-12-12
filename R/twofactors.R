@@ -18,7 +18,7 @@ twofactors <- function(y,x1,x2, graph.type = "bar"){
   levels2 <- length(levels(factor(x2)))
 
   text.df <- tibble(x1 = rep(levels(as.factor(x1)),levels2),x2 = rep(levels(as.factor(x2)),each = levels1),means = as.vector(means),sd = as.vector(sds),ns = as.vector(n),ci = 1.96 * sd / sqrt(ns),lwr = means - ci,upr = means + ci,d = 0,p = 0)
-  dataset <- as_tibble(cbind(as.factor(x1),as.factor(x2),as.numeric(y)))
+  dataset <- tibble(x1 = as.factor(x1),x2 = as.factor(x2),y = as.numeric(y))
 
   # make the graph: boxplot
   if (graph.type == "box"){

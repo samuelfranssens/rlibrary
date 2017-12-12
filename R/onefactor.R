@@ -16,7 +16,7 @@ onefactor <- function(y, x1, graph.type = "bar"){
   n     <- tapply(y,x1,length)
 
   text.df <- tibble(x1 = levels(as.factor(x1)),means = as.vector(means),sd = as.vector(sds),ns = as.vector(n),ci = 1.96 * sd / sqrt(ns),lwr = means - ci,upr = means + ci)
-  dataset <- as_tibble(cbind(as.factor(x1),as.numeric(y)))
+  dataset <- tibble(x1 = as.factor(x1), y = as.numeric(y))
 
   # make the graph: boxplot
   if (graph.type == "box"){

@@ -9,9 +9,7 @@ boxplot(box.arg, y)
 \arguments{
 \item{box.arg}{box.arg}
 
-\item{limits}{limits}
-
-\item{breaks}{breaks}
+\item{y}{dependent variable}
 }
 \description{
 Use onefactor and twofactor instead of this
