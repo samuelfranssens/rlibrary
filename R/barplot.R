@@ -2,8 +2,8 @@
 #'
 #' Use onefactor and twofactor instead of this
 #' @param bar.arg box.arg
-#' @param limits limits
-#' @param breaks breaks
+#' @param lwr lwr end of ci
+#' @param upr upr end of ci
 #' @keywords boxplot
 #' @export
 #' @examples

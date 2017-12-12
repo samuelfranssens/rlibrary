@@ -2,8 +2,7 @@
 #'
 #' Use onefactor and twofactor instead of this
 #' @param box.arg box.arg
-#' @param limits limits
-#' @param breaks breaks
+#' @param y dependent variable
 #' @keywords boxplot
 #' @export
 #' @examples
