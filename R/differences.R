@@ -9,9 +9,9 @@
 #'
 #' also: t = ( mean(x1) - mean(x2) ) / (sigma  * sqrt(1/n1 + 1/n2))
 #' so t = d * 1 / sqrt(1/n1 + 1/n2)
-#' so d = t
+#' so d = t * sqrt(1/n1 + 1/n2)
 #'
-#' param mean1 mean 1
+#' @param mean1 mean 1
 #' @param mean2 mean 2
 #' @param sd1 sd 1
 #' @param sd2 sd 2
@@ -25,8 +25,8 @@
 differences <- function(mean1,mean2,sd1,sd2,n1,n2,ci = 0.95) {
 
   difference <- mean1 - mean2
-  sd.pooled <- sqrt(( sd1*sd1 * (n1-1) + sd2*sd2 * (n2-1))/(df))
   df=n1+n2-2
+  sd.pooled <- sqrt(( sd1*sd1 * (n1-1) + sd2*sd2 * (n2-1))/(df))
 
   lwr <- difference + qt((1-ci)/2, df = df) * sd.pooled * sqrt(1/n1 + 1/n2)
   upr <- difference + qt((1+ci)/2, df = df) * sd.pooled * sqrt(1/n1 + 1/n2)
@@ -35,7 +35,10 @@ differences <- function(mean1,mean2,sd1,sd2,n1,n2,ci = 0.95) {
   d.lwr <- cohend(d.est,n1,n2,"lwr")
   d.upr <- cohend(d.est,n1,n2,"upr")
 
-  p <- round( 2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df ) ,3)
+  pvalue <- 2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df )
+  p <- case_when(pvalue> .01  ~ paste0("= ",round(pvalue,2)),
+                 pvalue>=.001 ~ paste0("= ",round(pvalue,3)),
+                 pvalue< .001 ~ "< .001")
 
   returnthis <- data.frame(cbind(difference,lwr,upr,df,p,d.est,d.lwr,d.upr))
   names(returnthis) <- c("difference","lwr","upr","df","p","d.est","d.lwr","d.upr")

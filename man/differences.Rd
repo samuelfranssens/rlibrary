@@ -7,6 +7,8 @@
 differences(mean1, mean2, sd1, sd2, n1, n2, ci = 0.95)
 }
 \arguments{
+\item{mean1}{mean 1}
+
 \item{mean2}{mean 2}
 
 \item{sd1}{sd 1}
@@ -28,9 +30,7 @@ where b = n1 + n2 - 2
 
 also: t = ( mean(x1) - mean(x2) ) / (sigma  * sqrt(1/n1 + 1/n2))
 so t = d * 1 / sqrt(1/n1 + 1/n2)
-so d = t
-
-param mean1 mean 1
+so d = t * sqrt(1/n1 + 1/n2)
 }
 \examples{
 differences(mean1,mean2,sd1,sd2,n1,n2)
