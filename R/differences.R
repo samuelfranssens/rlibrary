@@ -35,12 +35,9 @@ differences <- function(mean1,mean2,sd1,sd2,n1,n2,ci = 0.95) {
   d.lwr <- cohend(d.est,n1,n2,"lwr")
   d.upr <- cohend(d.est,n1,n2,"upr")
 
-  pvalue <- 2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df )
-  p <- case_when(pvalue> .01  ~ paste0("= ",round(pvalue,2)),
-                 pvalue>=.001 ~ paste0("= ",round(pvalue,3)),
-                 pvalue< .001 ~ "< .001")
+  pvalue <- round(2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df ),4)
 
-  returnthis <- data.frame(cbind(difference,lwr,upr,df,p,d.est,d.lwr,d.upr))
+  returnthis <- as_tibble(cbind(difference,lwr,upr,df,pvalue,d.est,d.lwr,d.upr))
   names(returnthis) <- c("difference","lwr","upr","df","p","d.est","d.lwr","d.upr")
   return(returnthis)
 }
