@@ -9,8 +9,9 @@
 
 read_qualtrics <- function(x){
   csv1 <- read.csv(x, header = TRUE)
-  csv2 <- read.csv(x, header = TRUE, skip = 1)
-  csv2 <- csv2[-1,]
+  csv2 <- read.csv(x, header = FALSE, skip = 1)
+  csv2 <- csv2[-c(1:2),]
+  as_tibble(csv2)
   names(csv2) <- names(csv1)
 
   require(dplyr)
