@@ -2,28 +2,20 @@
 % Please edit documentation in R/spssanova.R
 \name{spssanova}
 \alias{spssanova}
-\title{A function that generates the same ANOVA output as SPSS does.
-This is a BETA version.
-This will set your contrast coding to treatment
-This will give a different output when first assigning the linear model to an object and then applying the function (e.g., z <- lm(y~x) ; spssanova(z))
-vs when not assigning the linear model to an object (e.g., spssanova(lm(y~x)))
-I don't know why this happens, but the second method gives the same output as SPSS}
+\title{A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova}
 \usage{
-spssanova(linearmodelfit)
+spssanova(formula, DATA)
 }
 \arguments{
-\item{linearmodelfit}{A linear model}
+\item{formula}{A formula.}
+
+\item{DATA}{data}
 }
 \description{
-A function that generates the same ANOVA output as SPSS does.
-This is a BETA version.
-This will set your contrast coding to treatment
-This will give a different output when first assigning the linear model to an object and then applying the function (e.g., z <- lm(y~x) ; spssanova(z))
-vs when not assigning the linear model to an object (e.g., spssanova(lm(y~x)))
-I don't know why this happens, but the second method gives the same output as SPSS
+A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova
 }
 \examples{
-spssanova(lm(y ~ x, data))
+spssanova(formula = "p1 ~ conditie", DATA = md)
 }
 \keyword{anova}
 \keyword{spss}

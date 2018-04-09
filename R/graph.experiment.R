@@ -9,6 +9,7 @@
 #' graph.experiment("control", c("info","imagination"), study3, graph.type = "box")
 
 graph.experiment <- function(y, x, dataset, graph.type = "bar"){
+
   # select data -------------------------------------------------------------
   data <- dplyr::select(dataset,y,x)
   if (length(x) == 1){
@@ -24,8 +25,8 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
   summary <- summarise(data.grouped, mean = mean(dv), sd = sd(dv), n = n(), ci = 1.96 * sd/sqrt(n), lwr = mean-ci, upr = mean+ci, d = 0, p = 0, est = 0)
   y.min <- floor(min(data$dv))
   y.max <- ceiling(max(data$dv))
-  levels1 <- length(levels(data$iv1))
-  levels2 <- ifelse(length(x) == 2,length(levels(data$iv2)),1)
+  levels1 <- length(levels(factor(data$iv1)))
+  levels2 <- ifelse(length(x) == 2,length(levels(factor(data$iv2))),1)
 
   # colors -------------------------------------------------------------
   colors <- c("gray","tomato3","orange","red","tomato3")
