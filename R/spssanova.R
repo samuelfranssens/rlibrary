@@ -1,5 +1,5 @@
 #' A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova
-#' @param linearmodel
+#' @param linearmodel A linear model.
 #' @keywords spss anova
 #' @export
 #' @examples
@@ -7,6 +7,7 @@
 
 spssanova <- function(linearmodel) {
 
+  library(car)
   # get initial contrast options:
   initial.options <- options()
   initial.options.contrasts <- initial.options$contrasts

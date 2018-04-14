@@ -6,6 +6,9 @@
 \usage{
 spssanova(linearmodel)
 }
+\arguments{
+\item{linearmodel}{A linear model.}
+}
 \description{
 A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova
 }
