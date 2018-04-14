@@ -4,18 +4,13 @@
 \alias{spssanova}
 \title{A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova}
 \usage{
-spssanova(formula, DATA)
-}
-\arguments{
-\item{formula}{A formula.}
-
-\item{DATA}{data}
+spssanova(linearmodel)
 }
 \description{
 A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova
 }
 \examples{
-spssanova(formula = "p1 ~ conditie", DATA = md)
+spssanova(lm(y ~ x1 * x2, data=data))
 }
 \keyword{anova}
 \keyword{spss}

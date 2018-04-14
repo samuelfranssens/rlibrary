@@ -1,19 +1,34 @@
 #' A function that generates the same ANOVA output as SPSS does, i.e., Type III Anova
-#' @param formula A formula.
-#' @param DATA data
+#' @param linearmodel
 #' @keywords spss anova
 #' @export
 #' @examples
-#' spssanova(formula = "p1 ~ conditie", DATA = md)
+#' spssanova(lm(y ~ x1 * x2, data=data))
 
-spssanova <- function(formula, DATA) {
+spssanova <- function(linearmodel) {
 
-  # http://www.statscanbefun.com/rblog/2015/8/27/ensuring-r-generates-the-same-anova-f-values-as-spss
+  # get initial contrast options:
+  initial.options <- options()
+  initial.options.contrasts <- initial.options$contrasts
 
-  options(contrasts = c("contr.helmert", "contr.poly"))   # Set contrast coding to contr.helmert
-  linear.model <- lm(as.formula(formula), data=DATA)
-  type3_anova <- car::Anova(linear.model, type = 3)
-  options(contrasts=c("contr.treatment","contr.poly"))    # Set contrast coding to contr.treatment
+  # set contrasts for each variable
+  variables <- all.vars(linearmodel$call)
+  variables2 <- variables[-c(1,length(variables))]
+  variables.list <- as.list(variables2)
+  for (i in seq(length(variables.list))){
+    variables.list[[i]] <- contr.sum
+  }
+  names(variables.list) <- variables2
+
+  # perform ANOVA
+  options(contrasts=c("contr.sum", "contr.poly"))
+  dt <- linearmodel$model
+  new.linearmodel <- lm(linearmodel$call, data=dt)
+  type3_anova <- car::Anova(new.linearmodel, contrasts=variables.list, type = 3)
+
+  # reset contrast options
+  options(contrasts=initial.options.contrasts)    # Set contrast coding to initial contrast options
 
   return(type3_anova)
 }
+
