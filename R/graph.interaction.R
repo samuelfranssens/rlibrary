@@ -10,7 +10,7 @@
 
 graph.interaction <- function(y, x, z, dataset){
 
-  ivcount <- ivcount # how many independent variables
+  ivcount <- length(x) # how many independent variables
   if (ivcount>2){ stop("too many x variables")}
 
   # select data -------------------------------------------------------------
