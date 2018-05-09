@@ -8,22 +8,30 @@
 #' @examples
 #' graph.experiment("control", c("info","imagination"), study3, graph.type = "box")
 
+dataset <- pcc.wide
+y <- "conspicuous"
+x <- c("power","audience")
+z <- "dominance"
+
 graph.interaction <- function(y, x, z, dataset){
+
+  ivcount <- ivcount # how many independent variables
+  if (ivcount>2){ stop("too many x variables")}
 
   # select data -------------------------------------------------------------
   data <- dplyr::select(dataset,y,x,z)
-  if (length(x) == 1){
+  if (ivcount == 1){
     names(data) <- c("dv","iv1","z")
   }
-  if (length(x) == 2){
+  if (ivcount == 2){
     names(data) <- c("dv","iv1","iv2","z")
   }
 
   # summarize -------------------------------------------------------------
   y.min <- floor(  min(data$dv))
   y.max <- ceiling(max(data$dv))
-  levels1 <- length(levels(factor(data$iv1)))
-  levels2 <- ifelse(length(x) == 2,length(levels(factor(data$iv2))),1)
+  levels1 <- length(levels(factor(data$iv1))) # number of levels of X1
+  levels2 <- ifelse(ivcount == 2,length(levels(factor(data$iv2))),1) # number of levels of X2
 
   # colors -------------------------------------------------------------
   colors <- c("gray","tomato3","orange","red","tomato3")
@@ -33,9 +41,19 @@ graph.interaction <- function(y, x, z, dataset){
   limits  <- c(y.min-0.5,y.max+0.5) # boxplot
   breaks  <-  c(y.min:y.max)        # boxplot
 
-  graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
-    geom_jitter (size = 3, height = 0.1, width = 0.2) +
-    stat_smooth(method="lm", size=2)
+  if (ivcount == 1){
+    graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
+      geom_jitter (size = 3, height = 0.1, width = 0.2) +
+      stat_smooth(method="lm", size=2)
+  }
+
+
+  if (ivcount == 2){
+    graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
+      facet_wrap(~ iv2) +
+      geom_jitter (size = 3, height = 0.1, width = 0.2) +
+      stat_smooth(method="lm", size=2)
+  }
 
   # boxplot & barplot -------------------------------------------------------------
   graph <- graph +
@@ -50,8 +68,9 @@ graph.interaction <- function(y, x, z, dataset){
           panel.spacing = unit(0.1,"lines"),
           strip.text = element_text(size = 13, face = "bold"),
           strip.background = element_rect(fill = "gray")) +
-    xlab(x)+
-    ylab(y)
+    xlab(z)+
+    ylab(y) +
+    labs(color=x[1])
 
   return(graph)
 }
