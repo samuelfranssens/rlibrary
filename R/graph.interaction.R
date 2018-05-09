@@ -8,11 +8,6 @@
 #' @examples
 #' graph.experiment("control", c("info","imagination"), study3, graph.type = "box")
 
-dataset <- pcc.wide
-y <- "conspicuous"
-x <- c("power","audience")
-z <- "dominance"
-
 graph.interaction <- function(y, x, z, dataset){
 
   ivcount <- ivcount # how many independent variables
