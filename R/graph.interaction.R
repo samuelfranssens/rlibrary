@@ -36,18 +36,12 @@ graph.interaction <- function(y, x, z, dataset){
   limits  <- c(y.min-0.5,y.max+0.5) # boxplot
   breaks  <-  c(y.min:y.max)        # boxplot
 
-  if (ivcount == 1){
-    graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
+  graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
       geom_jitter (size = 3, height = 0.1, width = 0.2) +
       stat_smooth(method="lm", size=2)
-  }
 
-
-  if (ivcount == 2){
-    graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
-      facet_wrap(~ iv2) +
-      geom_jitter (size = 3, height = 0.1, width = 0.2) +
-      stat_smooth(method="lm", size=2)
+  if (ivcount == 2){ # if there are more than one independent variables, split up the graph
+    graph <- graph + facet_wrap(~ iv2)
   }
 
   # boxplot & barplot -------------------------------------------------------------
