@@ -127,7 +127,7 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
     interaction$label <- ""
     interaction$label[nrow(interaction)] <- paste0("interaction: p = ",round(type3anova(lm(dv ~ iv1 * iv2, data=data))["iv1:iv2",4],3))
 
-    graph + geom_text(data=interaction, inherit.aes = FALSE, aes(x = iv1, y = dv, label=label), color = colors["text"], fontface="bold", size = 5)
+    graph <- graph + geom_text(data=interaction, inherit.aes = FALSE, aes(x = iv1, y = dv, label=label), color = colors["text"], fontface="bold", size = 5)
   }
 
   return(graph)
