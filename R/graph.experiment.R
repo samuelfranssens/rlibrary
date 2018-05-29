@@ -10,23 +10,32 @@
 
 graph.experiment <- function(y, x, dataset, graph.type = "bar"){
 
+  ivcount <- length(x)
+
   # select data -------------------------------------------------------------
   data <- dplyr::select(dataset,y,x)
-  if (length(x) == 1){
+  if (ivcount == 1){
     names(data) <- c("dv","iv1")
     data.grouped <- group_by(data,iv1)
   }
-  if (length(x) == 2){
+  if (ivcount == 2){
     names(data) <- c("dv","iv1","iv2")
     data.grouped <- group_by(data,iv2,iv1)
+  }
+  if (ivcount == 3){
+    names(data) <- c("dv","iv1","iv2","iv3")
+    data.grouped <- group_by(data,iv3,iv2,iv1)
+  }
+  if (ivcount >3){
+    stop("too many independent variables")
   }
 
   # summarize -------------------------------------------------------------
   summary <- summarise(data.grouped, mean = mean(dv), sd = sd(dv), n = n(), ci = 1.96 * sd/sqrt(n), lwr = mean-ci, upr = mean+ci, d = 0, p = 0, est = 0)
   y.min <- floor(min(data$dv))
   y.max <- ceiling(max(data$dv))
-  levels1 <- length(levels(factor(data$iv1)))
-  levels2 <- ifelse(length(x) == 2,length(levels(factor(data$iv2))),1)
+  levels1 <- length(levels(factor(data$iv1))) # number of levels factor 1
+  levels2 <- ifelse(ivcount == 2,length(levels(factor(data$iv2))),1) # number of levels factor 2
 
   # colors -------------------------------------------------------------
   colors <- c("gray","tomato3","orange","red","tomato3")
@@ -38,7 +47,7 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
     breaks  <-  c(y.min:y.max)       # boxplot
 
     graph <- ggplot(aes(y = dv, x = iv1, group = iv1), data=data)
-    if(length(x) == 2){ graph <- graph + facet_wrap(~ iv2) }
+    if(ivcount == 2){ graph <- graph + facet_wrap(~ iv2) }
     graph <- graph +
       geom_boxplot(fill = "gray", outlier.fill = "tomato3", outlier.shape = 25, outlier.size = 3) +
       geom_jitter (size = 3, height = 0.1, width = 0.2) +
@@ -52,7 +61,7 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
     breaks <- c(min(y.min,0):y.max)     # barplot
 
     graph <- ggplot(aes(y = mean, x = iv1, ymax=(round(mean,0)+1)), data = summary)
-    if(length(x) == 2){ graph <- graph + facet_wrap(~ iv2) }
+    if(ivcount == 2){ graph <- graph + facet_wrap(~ iv2) }
     graph <- graph +
       geom_bar(stat="identity", position="dodge", colour="black") +
       geom_errorbar(aes(ymin=lwr, ymax=upr), width=0.3, size = 1, position=position_dodge(.9), colour=colors["error"]) +
@@ -94,8 +103,8 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
         #print(k)
       }
 
-      if(length(x) == 1){ t <- glht(aov(dv ~ iv1,data=data), linfct=k) }
-      if(length(x) == 2){ t <- glht(aov(dv ~ iv1*iv2,data=data), linfct=k) }
+      if(ivcount == 1){ t <- glht(aov(dv ~ iv1,data=data), linfct=k) }
+      if(ivcount == 2){ t <- glht(aov(dv ~ iv1*iv2,data=data), linfct=k) }
 
       b <- (i-1)*2 + 1
       e <- b+1
@@ -107,7 +116,18 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
 
   # update graph with contrasts ---------------------------------------------
   if (levels1 == 2) {
-    graph <- graph + geom_text(data=summary, aes(x = 1.5, y = y.min+0.2, label=paste0("d = ",round(d,2),", p = ",round(p,3),", est = ",round(est,2))), color = colors["text"], fontface="bold", size = 5)
+
+   graph <- graph + geom_text(data=summary, aes(x = 1.5, y = y.min+0.2, label=paste0("d = ",round(d,2),", p = ",round(p,3),", est = ",round(est,2))), color = colors["text"], fontface="bold", size = 5)
+  }
+
+  if (ivcount == 2) { # adds the p value of the interaction term
+    interaction <- as_tibble(expand.grid(levels(factor(data$iv1)),levels(factor(data$iv2))))
+    names(interaction) <- c("iv1","iv2")
+    interaction$dv <- y.max - .02
+    interaction$label <- ""
+    interaction$label[nrow(interaction)] <- paste0("interaction: p = ",round(type3anova(lm(dv ~ iv1 * iv2, data=data))["iv1:iv2",4],3))
+
+    graph + geom_text(data=interaction, inherit.aes = FALSE, aes(x = iv1, y = dv, label=label), color = colors["text"], fontface="bold", size = 5)
   }
 
   return(graph)
