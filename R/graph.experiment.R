@@ -8,12 +8,13 @@
 #' @examples
 #' graph.experiment("control", c("info","imagination"), study3, graph.type = "box")
 
-graph.experiment <- function(y, x, dataset, graph.type = "bar"){
+graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
 
   ivcount <- length(x)
 
   # select data -------------------------------------------------------------
   data <- dplyr::select(dataset,y,x)
+
   if (ivcount == 1){
     names(data) <- c("dv","iv1")
     data.grouped <- group_by(data,iv1)
@@ -64,10 +65,12 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
     if(ivcount == 2){ graph <- graph + facet_wrap(~ iv2) }
     graph <- graph +
       geom_bar(stat="identity", position="dodge", colour="black") +
-      geom_errorbar(aes(ymin=lwr, ymax=upr), width=0.3, size = 1, position=position_dodge(.9), colour=colors["error"]) +
       geom_text(aes(label=round(mean,2)),colour=colors["text"], fontface="bold", position=position_dodge(.9), size=5, vjust = 3) +
       geom_hline(yintercept=0) +
       theme(legend.title = element_blank())
+
+    if(ws==0){ graph <- graph + geom_errorbar(aes(ymin=lwr, ymax=upr), width=0.3, size = 1, position=position_dodge(.9), colour=colors["error"]) }
+
   } # end of barplot
 
   # boxplot & barplot -------------------------------------------------------------
@@ -117,10 +120,13 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar"){
   # update graph with contrasts ---------------------------------------------
   if (levels1 == 2) {
 
-   graph <- graph + geom_text(data=summary, aes(x = 1.5, y = y.min+0.2, label=paste0("d = ",round(d,2),", p = ",round(p,3),", est = ",round(est,2))), color = colors["text"], fontface="bold", size = 5)
+    if(ws == 0){ label <- paste0("d = ",round(summary$d,2),", p = ",round(summary$p,3),", est = ",round(summary$est,2)) }
+    if(ws == 1){ label <- paste0("est = ",round(summary$est,2)) }
+
+   graph <- graph + geom_text(data=summary, aes(x = 1.5, y = y.min+0.2, label=label), color = colors["text"], fontface="bold", size = 5)
   }
 
-  if (ivcount == 2) { # adds the p value of the interaction term
+  if (ivcount == 2 & ws == 0) { # adds the p value of the interaction term
     interaction <- as_tibble(expand.grid(levels(factor(data$iv1)),levels(factor(data$iv2))))
     names(interaction) <- c("iv1","iv2")
     interaction$dv <- y.max - .02

@@ -10,6 +10,6 @@
 
 wide2long <- function(x,measure.vars){
   id.vars <- names(x)[names(x) %nin% measure.vars]
-  data <- melt(data = x, id.vars = id.vars, measure.vars = measure.vars)
+  data <- reshape2::melt(data = x, id.vars = id.vars, measure.vars = measure.vars)
   return(data)
 }

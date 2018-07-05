@@ -4,7 +4,7 @@
 \alias{graph.experiment}
 \title{Boxplots and barplots for two X variables}
 \usage{
-graph.experiment(y, x, dataset, graph.type = "bar")
+graph.experiment(y, x, dataset, graph.type = "bar", ws = 0)
 }
 \arguments{
 \item{y}{dependent variable}
