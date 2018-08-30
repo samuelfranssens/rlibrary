@@ -1,4 +1,4 @@
-#' fake results for class
+#' Generate graph based on means (for class)
 #'
 #' @param a mean
 #' @param b mean
@@ -8,6 +8,8 @@
 #' @param contrast first factor
 #' @param context second factor
 #' @param dv label
+#' @keywords barplot
+#' @export
 #' @examples
 #' graph.fake.results(a = 2, b = 5, c = 7, d = 2, scale = c(0,7), contrast = c("gender","male","female"), context = c("social_influence","absent","present"), "choice")
 
@@ -44,10 +46,4 @@ graph.fake.results <- function(a,b,c,d,scale,contrast,context,dv, SIZE = 5){
     labs(fill = contrast[1])+
     ylab(dv) +
     scale_fill_brewer(palette = "Set1")
-
-
-
 }
-
-
-

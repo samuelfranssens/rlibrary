@@ -4,7 +4,7 @@
 \alias{graph.interaction}
 \title{Boxplots and barplots for two X variables}
 \usage{
-graph.interaction(y, x, z, dataset)
+graph.interaction(y, x, z, dataset, SIZE = 5)
 }
 \arguments{
 \item{y}{dependent variable}
