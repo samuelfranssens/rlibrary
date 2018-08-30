@@ -8,7 +8,7 @@
 #' @examples
 #' graph.experiment("control", c("info","imagination"), study3, graph.type = "box")
 
-graph.interaction <- function(y, x, z, dataset){
+graph.interaction <- function(y, x, z, dataset, SIZE = 5){
 
   ivcount <- length(x) # how many independent variables
   if (ivcount>2){ stop("too many x variables")}
@@ -37,8 +37,8 @@ graph.interaction <- function(y, x, z, dataset){
   breaks  <-  c(y.min:y.max)        # boxplot
 
   graph <- ggplot(aes(x = z, y = dv, colour = iv1), data=data) +
-      geom_jitter (size = 3, height = 0.1, width = 0.2) +
-      stat_smooth(method="lm", size=2)
+      geom_jitter (size = SIZE*0.6, height = 0.1, width = 0.2) +
+      stat_smooth(method="lm", size=SIZE*0.4)
 
   if (ivcount == 2){ # if there are more than one independent variables, split up the graph
     graph <- graph + facet_wrap(~ iv2)
@@ -47,15 +47,15 @@ graph.interaction <- function(y, x, z, dataset){
   # boxplot & barplot -------------------------------------------------------------
   graph <- graph +
     scale_y_continuous(limits=limits, breaks = breaks) +
-    theme(axis.title.y = element_text(colour="black", size=13, face="bold"),
-          axis.title.x = element_text(colour="black", size=13, face="bold"),
-          axis.text.y =element_text(colour="black", size=13,  face="bold"),
-          axis.text.x =element_text(colour="black", size=13,  face="bold"),
+    theme(axis.title.y = element_text(colour="black", size=SIZE*2.6, face="bold"),
+          axis.title.x = element_text(colour="black", size=SIZE*2.6, face="bold"),
+          axis.text.y =element_text(colour="black", size=SIZE*2.6,  face="bold"),
+          axis.text.x =element_text(colour="black", size=SIZE*2.6,  face="bold"),
           panel.grid.major = element_line(colour = "gray85"),
           panel.grid.minor = element_line(colour = "gray"),
           panel.background = element_rect(fill = "white"),
           panel.spacing = unit(0.1,"lines"),
-          strip.text = element_text(size = 13, face = "bold"),
+          strip.text = element_text(size = SIZE*2.6, face = "bold"),
           strip.background = element_rect(fill = "gray")) +
     xlab(z)+
     ylab(y) +

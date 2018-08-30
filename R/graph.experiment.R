@@ -8,7 +8,7 @@
 #' @examples
 #' graph.experiment("control", c("info","imagination"), study3, graph.type = "box")
 
-graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
+graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0, SIZE = 5){
 
   ivcount <- length(x)
 
@@ -50,10 +50,10 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
     graph <- ggplot(aes(y = dv, x = iv1, group = iv1), data=data)
     if(ivcount == 2){ graph <- graph + facet_wrap(~ iv2) }
     graph <- graph +
-      geom_boxplot(fill = "gray", outlier.fill = "tomato3", outlier.shape = 25, outlier.size = 3) +
-      geom_jitter (size = 3, height = 0.1, width = 0.2) +
-      geom_point(data = summary, aes(x = iv1, y = mean), colour=colors["point"], shape=18, size=7) +
-      geom_text (data = summary, aes(x = iv1, y = mean , label=round(mean,2)), colour=colors["text"], hjust = -0.8, size = 5, fontface="bold", inherit.aes=FALSE)
+      geom_boxplot(fill = "gray", outlier.fill = "tomato3", outlier.shape = 25, outlier.size = SIZE*0.6) +
+      geom_jitter (size = SIZE*0.6, height = 0.1, width = 0.2) +
+      geom_point(data = summary, aes(x = iv1, y = mean), colour=colors["point"], shape=18, size=SIZE*1.4) +
+      geom_text (data = summary, aes(x = iv1, y = mean , label=round(mean,2)), colour=colors["text"], hjust = -0.8, size = SIZE, fontface="bold", inherit.aes=FALSE)
   } # end of boxplot
 
   # barplot -------------------------------------------------------------
@@ -65,7 +65,7 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
     if(ivcount == 2){ graph <- graph + facet_wrap(~ iv2) }
     graph <- graph +
       geom_bar(stat="identity", position="dodge", colour="black") +
-      geom_text(aes(label=round(mean,2)),colour=colors["text"], fontface="bold", position=position_dodge(.9), size=5, vjust = 3) +
+      geom_text(aes(label=round(mean,2)),colour=colors["text"], fontface="bold", position=position_dodge(.9), size = SIZE, vjust = 3) +
       geom_hline(yintercept=0) +
       theme(legend.title = element_blank())
 
@@ -76,15 +76,15 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
   # boxplot & barplot -------------------------------------------------------------
   graph <- graph +
     scale_y_continuous(limits=limits, breaks = breaks) +
-    theme(axis.title.y = element_text(colour="black", size=13, face="bold"),
-          axis.title.x = element_text(colour="black", size=13, face="bold"),
-          axis.text.y =element_text(colour="black", size=13,  face="bold"),
-          axis.text.x =element_text(colour="black", size=13,  face="bold"),
+    theme(axis.title.y = element_text(colour="black", size=SIZE*2.6, face="bold"),
+          axis.title.x = element_text(colour="black", size=SIZE*2.6, face="bold"),
+          axis.text.y =element_text(colour="black", size=SIZE*2.6,  face="bold"),
+          axis.text.x =element_text(colour="black", size=SIZE*2.6,  face="bold"),
           panel.grid.major = element_line(colour = "gray85"),
           panel.grid.minor = element_line(colour = "gray"),
           panel.background = element_rect(fill = "white"),
           panel.spacing = unit(0.1,"lines"),
-          strip.text = element_text(size = 13, face = "bold"),
+          strip.text = element_text(size = SIZE*2.6, face = "bold"),
           strip.background = element_rect(fill = "gray"),
           legend.position = "none") +
     xlab("")+
@@ -120,10 +120,10 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
   # update graph with contrasts ---------------------------------------------
   if (levels1 == 2) {
 
-    if(ws == 0){ label <- paste0("d = ",round(summary$d,2),", p = ",round(summary$p,3),", est = ",round(summary$est,2)) }
+    if(ws == 0){ label <- paste0("d = ",round(summary$d,2),",\np = ",round(summary$p,3),",\nest = ",round(summary$est,2)) }
     if(ws == 1){ label <- paste0("est = ",round(summary$est,2)) }
 
-   graph <- graph + geom_text(data=summary, aes(x = 1.5, y = y.min+0.2, label=label), color = colors["text"], fontface="bold", size = 5)
+   graph <- graph + geom_text(data=summary, aes(x = 1.5, y = y.min+0.2, label=label), color = colors["text"], fontface="bold", size = SIZE)
   }
 
   if (ivcount == 2 & ws == 0) { # adds the p value of the interaction term
@@ -131,9 +131,9 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0){
     names(interaction) <- c("iv1","iv2")
     interaction$dv <- y.max - .02
     interaction$label <- ""
-    interaction$label[nrow(interaction)] <- paste0("interaction: p = ",round(type3anova(lm(dv ~ iv1 * iv2, data=data))["iv1:iv2",4],3))
+    interaction$label[nrow(interaction)] <- paste0("interaction:\np = ",round(type3anova(lm(dv ~ iv1 * iv2, data=data))["iv1:iv2",4],3))
 
-    graph <- graph + geom_text(data=interaction, inherit.aes = FALSE, aes(x = iv1, y = dv, label=label), color = colors["text"], fontface="bold", size = 5)
+    graph <- graph + geom_text(data=interaction, inherit.aes = FALSE, aes(x = iv1, y = dv, label=label), color = colors["text"], fontface="bold", size = SIZE)
   }
 
   return(graph)
