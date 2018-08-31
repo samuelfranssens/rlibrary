@@ -8,12 +8,13 @@
 #' @param contrast first factor
 #' @param context second factor
 #' @param dv label
+#' @param addlabels add labels
 #' @keywords barplot
 #' @export
 #' @examples
 #' graph.fake.results(a = 2, b = 5, c = 7, d = 2, scale = c(0,7), contrast = c("gender","male","female"), context = c("social_influence","absent","present"), "choice")
 
-graph.fake.results <- function(a,b,c,d,scale,contrast,context,dv, SIZE = 5){
+graph.fake.results <- function(a,b,c,d,scale,contrast,context,dv, SIZE = 5, addlabels = 0){
 
   data <- tibble(contrst = c(rep(contrast[2],2),rep(contrast[3],2)),
                  contxt = rep(c(context[2],context[3]),2)) %>%
@@ -23,10 +24,9 @@ graph.fake.results <- function(a,b,c,d,scale,contrast,context,dv, SIZE = 5){
     mutate(label = c("A","B","C","D"),
            dv = c(a,b,c,d))
 
-  ggplot(aes(y = dv, x = contxt, fill = contrst), data = data) +
+  graph <- ggplot(aes(y = dv, x = contxt, fill = contrst), data = data) +
     geom_bar(stat="identity", position="dodge", colour="black") +
     geom_text(aes(label=dv   ), fontface="bold", position=position_dodge(.9), size = SIZE, vjust = 1.5) +
-    geom_text(aes(label=label, y = 0.5), fontface="bold", position=position_dodge(.9), size = SIZE, vjust = 1) +
     geom_hline(yintercept=0) +
     scale_y_continuous(limits=scale, breaks = seq(scale[2])) +
     theme(axis.title.y = element_text(colour="black", size=SIZE*2.6, face="bold"),
@@ -46,4 +46,10 @@ graph.fake.results <- function(a,b,c,d,scale,contrast,context,dv, SIZE = 5){
     labs(fill = contrast[1])+
     ylab(dv) +
     scale_fill_brewer(palette = "Set1")
+
+  if(addlabels == 1){
+    graph <- graph + geom_text(aes(label=label, y = 0.5), fontface="bold", position=position_dodge(.9), size = SIZE, vjust = 1)
+  }
+
+  return(graph)
 }

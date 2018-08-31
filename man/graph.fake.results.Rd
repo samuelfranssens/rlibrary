@@ -4,7 +4,8 @@
 \alias{graph.fake.results}
 \title{Generate graph based on means (for class)}
 \usage{
-graph.fake.results(a, b, c, d, scale, contrast, context, dv, SIZE = 5)
+graph.fake.results(a, b, c, d, scale, contrast, context, dv, SIZE = 5,
+  addlabels = 0)
 }
 \arguments{
 \item{a}{mean}
@@ -22,6 +23,8 @@ graph.fake.results(a, b, c, d, scale, contrast, context, dv, SIZE = 5)
 \item{context}{second factor}
 
 \item{dv}{label}
+
+\item{addlabels}{add labels}
 }
 \description{
 Generate graph based on means (for class)
