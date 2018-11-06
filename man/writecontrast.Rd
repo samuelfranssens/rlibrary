@@ -4,7 +4,8 @@
 \alias{writecontrast}
 \title{A function for calculating (complicated) contrasts}
 \usage{
-writecontrast(n1, n2, nrofterms, aovmodel, K, rmd = FALSE, list = FALSE)
+writecontrast(n1, n2, nrofterms, aovmodel, K, rmd = FALSE,
+  list = FALSE)
 }
 \arguments{
 \item{n1}{number of observations in cell 1}

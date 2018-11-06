@@ -4,8 +4,8 @@
 \alias{graph.fake.results}
 \title{Generate graph based on means (for class)}
 \usage{
-graph.fake.results(a, b, c, d, scale, contrast, context, dv, SIZE = 5,
-  addlabels = 0)
+graph.fake.results(a, b, c = 0, d = 0, scale, contrast,
+  context = "none", dv, SIZE = 5, addlabels = 0)
 }
 \arguments{
 \item{a}{mean}
