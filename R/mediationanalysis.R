@@ -16,6 +16,9 @@
 
 mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numberofsimulations = 5000, seed = 123, alpha = .95){
 
+  tdi <- c("total","direct","indirect")
+
+  # observed
   eq1 <- lm(paste0(mediator," ~ ",paste(x, collapse = "*")),        data=data) # M ~ X
   eq2 <- lm(paste0(y," ~ ",paste(x, collapse = "*")),               data=data) # Y ~ X
   eq3 <- lm(paste0(y," ~ ",paste(x, collapse = "*")," + ",mediator),data=data) # Y ~ X + M
@@ -30,7 +33,6 @@ mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numbe
   # simulate
   if(simulate){
     set.seed(seed)
-    tdi <- c("total","direct","indirect")
     rownumber <- 1
     output <- tibble(simulation = seq(numberofsimulations), total = NA, direct = NA, indirect = NA)
 
