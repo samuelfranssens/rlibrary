@@ -60,8 +60,8 @@ mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numbe
     }
 
     # summarize results of simulation
-    UB <- 1-(1-alpha)/2
     LB <- (1-alpha)/2
+    UB <- 1-LB
     summary <- tibble(estimate = c(mean(output$total), mean(output$direct), mean(output$indirect)),
                       lb = c(quantile(output$total,LB), quantile(output$direct,LB), quantile(output$indirect,LB)),
                       ub = c(quantile(output$total,UB), quantile(output$direct,UB), quantile(output$indirect,UB)),
@@ -70,8 +70,8 @@ mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numbe
       summary$belowzero[i] <- length(which(output[,i+1]<0)) / nrow(output)
       summary$abovezero[i] <- 1-summary$belowzero[i]
       summary$significant[i] <- case_when(between(0, summary$lb[i], summary$ub[i]) ~ "not significant", TRUE ~ "significant")
-      summary$p[i] <- case_when(sign(summary$estimate[i])<0 ~ summary$abovezero[i],
-                                sign(summary$estimate[i])>0 ~ summary$belowzero[i])
+      summary$p[i] <- case_when(sign(summary$estimate[i])<0 ~ summary$abovezero[i]*2,
+                                sign(summary$estimate[i])>0 ~ summary$belowzero[i]*2)
     }
 
     return(cbind(observed,summary))
