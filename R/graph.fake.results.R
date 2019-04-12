@@ -85,7 +85,7 @@ graph.fake.results <- function(a, b, c=0, d=0, scale, contrast, context = "none"
 
 
   if(addlabels == 1){
-    graph <- graph + geom_text(aes(label=label, y = 0.5), fontface="bold", position=position_dodge(.9), size = SIZE, vjust = 1)
+    graph <- graph + geom_text(aes(label=label, y = 0.5), fontface="bold", position=position_dodge(.9), size = SIZE, vjust = -2)
   }
 
   return(graph)

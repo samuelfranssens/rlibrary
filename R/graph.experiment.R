@@ -131,7 +131,8 @@ graph.experiment <- function(y, x, dataset, graph.type = "bar", ws = 0, SIZE = 5
     names(interaction) <- c("iv1","iv2")
     interaction$dv <- y.max - .02
     interaction$label <- ""
-    interaction$label[nrow(interaction)] <- paste0("interaction:\np = ",round(type3anova(lm(dv ~ iv1 * iv2, data=data))["iv1:iv2",4],3))
+    library(magrittr)
+    interaction$label[nrow(interaction)] <- paste0("interaction:\np = ", round(type3anova(lm(dv ~ iv1 * iv2, data = data)) %>% filter(term == "iv1:iv2") %$% pvalue,4))
 
     graph <- graph + geom_text(data=interaction, inherit.aes = FALSE, aes(x = iv1, y = dv, label=label), color = colors["text"], fontface="bold", size = SIZE)
   }
