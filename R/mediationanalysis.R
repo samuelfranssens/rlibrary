@@ -26,9 +26,9 @@ mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numbe
   B <- coef(eq3)[mediator]
 
   observed <- tibble(effect = tdi,
-                     observed = c(sum(coef(eq2)[ unlist(effects[i]) ]),
-                                  sum(coef(eq3)[ unlist(effects[i]) ]),
-                                  sum(coef(eq1)[ unlist(effects[i]) ]) * B))
+                     observed = c(sum(coef(eq2)[ unlist(effects[1]) ]),
+                                  sum(coef(eq3)[ unlist(effects[1]) ]),
+                                  sum(coef(eq1)[ unlist(effects[1]) ]) * B))
 
   # simulate
   if(simulate){
@@ -51,9 +51,9 @@ mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numbe
 
       B <- coef(eq3.sim)[mediator]
 
-      output[rownumber,tdi] <- c(sum(coef(eq2.sim)[ unlist(effects[i]) ]),
-                                 sum(coef(eq3.sim)[ unlist(effects[i]) ]),
-                                 sum(coef(eq1.sim)[ unlist(effects[i]) ]) * B)
+      output[rownumber,tdi] <- c(sum(coef(eq2.sim)[ unlist(effects[1]) ]),
+                                 sum(coef(eq3.sim)[ unlist(effects[1]) ]),
+                                 sum(coef(eq1.sim)[ unlist(effects[1]) ]) * B)
       # re-iterate
       rownumber <- rownumber + 1
       if(rownumber %% (numberofsimulations/10) == 0){print(rownumber/numberofsimulations*100)}
