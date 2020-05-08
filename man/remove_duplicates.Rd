@@ -20,6 +20,6 @@ dataset$subject = 1 for the subject that participated first chronologically, = 2
 dataset$MID refers to mturk (or other) IDs
 }
 \examples{
-dataset <- remove_duplicates(dataset)
+remove_duplicates(dataset)
 }
 \keyword{duplicates}

@@ -13,12 +13,16 @@
 #' cohend(d.est, n1, n2, "lwr")
 
 cohend <- function(d, n1, n2,lu,ci = 0.95) {
+
   library(compute.es)
+
   t <- d * sqrt((n1 * n2)/(n1 + n2))
+
   capture.output(
     fit <- compute.es::tes(t = t, n.1 = n1, n.2 = n2, level = 100 * ci),
     file = "NUL"
   )
+
   if(lu=="lwr"){ return(fit$l.d) }
   if(lu=="upr"){ return(fit$u.d) }
 }

@@ -25,7 +25,7 @@
 differences <- function(mean1,mean2,sd1,sd2,n1,n2,ci = 0.95) {
 
   difference <- mean1 - mean2
-  df=n1+n2-2
+  df <- n1+n2-2
   sd.pooled <- sqrt(( sd1*sd1 * (n1-1) + sd2*sd2 * (n2-1))/(df))
 
   lwr <- difference + qt((1-ci)/2, df = df) * sd.pooled * sqrt(1/n1 + 1/n2)
@@ -37,7 +37,6 @@ differences <- function(mean1,mean2,sd1,sd2,n1,n2,ci = 0.95) {
 
   pvalue <- round(2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df ),4)
 
-  returnthis <- as_tibble(cbind(difference,lwr,upr,df,pvalue,d.est,d.lwr,d.upr))
-  names(returnthis) <- c("difference","lwr","upr","df","p","d.est","d.lwr","d.upr")
-  return(returnthis)
+  # return:
+  as_tibble(cbind(difference,lwr,upr,df,pvalue,d.est,d.lwr,d.upr)) %>% magrittr::set_names(c("difference","lwr","upr","df","p","d.est","d.lwr","d.upr"))
 }

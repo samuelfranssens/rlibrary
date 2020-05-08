@@ -4,17 +4,23 @@
 \alias{mediationanalysis}
 \title{Simple mediation analysis}
 \usage{
-mediationanalysis(y, mediator, x, effects, data, simulate = 0,
-  numberofsimulations = 5000, seed = 123, alpha = 0.95)
+mediationanalysis(
+  y,
+  mediator,
+  x_variables,
+  data,
+  simulate = FALSE,
+  numberofsimulations = 5000,
+  seed = 123,
+  alpha = 0.95
+)
 }
 \arguments{
 \item{y}{dependent variable}
 
 \item{mediator}{mediator}
 
-\item{x}{independent variable(s)}
-
-\item{effects}{which effect are we testing}
+\item{x_variables}{independent variable(s)}
 
 \item{data}{dataset}
 
@@ -30,6 +36,6 @@ mediationanalysis(y, mediator, x, effects, data, simulate = 0,
 Simple mediation analysis
 }
 \examples{
-graph.experiment("regard", "impression", "cc", "ccgucci")
+mediationanalysis(y = "tour", mediator = "control", x_variables = c("imagery_appeal","x2"), simulate = TRUE, data = data)
 }
 \keyword{mediation}

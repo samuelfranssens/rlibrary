@@ -12,9 +12,10 @@
 #' @keywords duplicates
 #' @export
 #' @examples
-#' dataset <- remove_duplicates(dataset)
+#' remove_duplicates(dataset)
 
 remove_duplicates <- function(dataset){
+
   library(tidyverse)
 
   if ("experiment" %in% names(dataset)){

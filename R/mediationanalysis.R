@@ -2,8 +2,7 @@
 #'
 #' @param y dependent variable
 #' @param mediator mediator
-#' @param x independent variable(s)
-#' @param effects which effect are we testing
+#' @param x_variables independent variable(s)
 #' @param data dataset
 #' @param simulate calculate CIs via bootstrapping?
 #' @param numberofsimulations number of bootstraps
@@ -12,70 +11,82 @@
 #' @keywords mediation
 #' @export
 #' @examples
-#' graph.experiment("regard", "impression", "cc", "ccgucci")
+#' mediationanalysis(y = "tour", mediator = "control", x_variables = c("imagery_appeal","x2"), simulate = TRUE, data = data)
 
-mediationanalysis <- function(y, mediator, x, effects, data, simulate = 0, numberofsimulations = 5000, seed = 123, alpha = .95){
+mediationanalysis <- function(y, mediator, x_variables, data, simulate = FALSE, numberofsimulations = 5000, seed = 123, alpha = .95){ #
 
+  # constant
   tdi <- c("total","direct","indirect")
 
-  # observed
-  eq1 <- lm(paste0(mediator," ~ ",paste(x, collapse = "*")),        data=data) # M ~ X
-  eq2 <- lm(paste0(y," ~ ",paste(x, collapse = "*")),               data=data) # Y ~ X
-  eq3 <- lm(paste0(y," ~ ",paste(x, collapse = "*")," + ",mediator),data=data) # Y ~ X + M
+  # x variable names
+  x_variables_names <- paste0("x",seq(length(x_variables)))
 
-  B <- coef(eq3)[mediator]
+  # select variables and rename
+  data <- data %>% select(!!y, !!mediator, !!x_variables) %>%
+    magrittr::set_names(c("y","mediator",x_variables_names))
+
+  # equations
+  eq1 <- paste0("mediator ~ ", paste(x_variables_names, collapse = "*"))
+  eq2 <- paste0("y ~ ",paste(x_variables_names, collapse = "*"))
+  eq3 <- paste0("y ~ ",paste(x_variables_names, collapse = "*")," + mediator")
+
+  # OBSERVED
+  observed_eq1 <- lm(eq1, data = data) %>% broom::tidy()
+  observed_eq2 <- lm(eq2, data = data) %>% broom::tidy()
+  observed_eq3 <- lm(eq3, data = data) %>% broom::tidy()
+
+  B <- observed_eq3 %>% filter(term == "mediator") %>% pull(estimate)
 
   observed <- tibble(effect = tdi,
-                     observed = c(sum(coef(eq2)[ unlist(effects[1]) ]),
-                                  sum(coef(eq3)[ unlist(effects[1]) ]),
-                                  sum(coef(eq1)[ unlist(effects[1]) ]) * B))
+                     observed = c(observed_eq2 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate),
+                                  observed_eq3 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate),
+                                  (observed_eq1 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate)) * B))
 
   # simulate
   if(simulate){
     set.seed(seed)
-    rownumber <- 1
     output <- tibble(simulation = seq(numberofsimulations), total = NA, direct = NA, indirect = NA)
 
     for (j in seq(numberofsimulations)) {
 
       # generate simulated data
-      simulation <- data
-      for (i in seq(nrow(data))) {
-        simulation[i,] <- sample_n(data,1)
-      }
+      simulation <- sample_n(tbl = data, size = nrow(data), replace = TRUE)
 
       # calculate results for simulated data
-      eq1.sim <- lm(paste0(mediator," ~ ",paste(x, collapse = "*")),        data=simulation) # M ~ X
-      eq2.sim <- lm(paste0(y," ~ ",paste(x, collapse = "*")),               data=simulation) # Y ~ X
-      eq3.sim <- lm(paste0(y," ~ ",paste(x, collapse = "*")," + ",mediator),data=simulation) # Y ~ X + M
+      simulated_eq1 <- lm(eq1, data = simulation) %>% broom::tidy()
+      simulated_eq2 <- lm(eq2, data = simulation) %>% broom::tidy()
+      simulated_eq3 <- lm(eq3, data = simulation) %>% broom::tidy()
 
-      B <- coef(eq3.sim)[mediator]
+      B <- simulated_eq3 %>% filter(term == "mediator") %>% pull(estimate)
 
-      output[rownumber,tdi] <- c(sum(coef(eq2.sim)[ unlist(effects[1]) ]),
-                                 sum(coef(eq3.sim)[ unlist(effects[1]) ]),
-                                 sum(coef(eq1.sim)[ unlist(effects[1]) ]) * B)
+      output[j, tdi] <- c(simulated_eq2 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate),
+                          simulated_eq3 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate),
+                          (simulated_eq1 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate)) * B)
       # re-iterate
-      rownumber <- rownumber + 1
-      if(rownumber %% (numberofsimulations/10) == 0){print(rownumber/numberofsimulations*100)}
+      if(j %% (numberofsimulations/10) == 0){print(j/numberofsimulations*100)}
     }
 
     # summarize results of simulation
     LB <- (1-alpha)/2
     UB <- 1-LB
-    summary <- tibble(estimate = c(mean(output$total), mean(output$direct), mean(output$indirect)),
-                      lb = c(quantile(output$total,LB), quantile(output$direct,LB), quantile(output$indirect,LB)),
-                      ub = c(quantile(output$total,UB), quantile(output$direct,UB), quantile(output$indirect,UB)),
-                      belowzero = 0, abovezero = 0,  significant = "", p = 0)
-    for (i in seq(nrow(summary))){
-      summary$belowzero[i] <- length(which(output[,i+1]<0)) / nrow(output)
-      summary$abovezero[i] <- 1-summary$belowzero[i]
-      summary$significant[i] <- case_when(between(0, summary$lb[i], summary$ub[i]) ~ "not significant", TRUE ~ "significant")
-      summary$p[i] <- case_when(sign(summary$estimate[i])<0 ~ summary$abovezero[i]*2,
-                                sign(summary$estimate[i])>0 ~ summary$belowzero[i]*2)
-    }
 
-    return(cbind(observed,summary))
-  } else {
-    return(observed)
+    summary <- output %>%
+      pivot_longer(cols = c(total,direct,indirect),
+                   names_to = "effect",
+                   values_to = "value") %>%
+      group_by(effect) %>%
+      summarize(estimate = mean(value),
+                lb = quantile(value, LB), ub = quantile(value, UB),
+                count = n(),
+                belowzero = sum(value<0)/count, abovezero = 1-belowzero) %>%
+      ungroup() %>%
+      mutate(significant = case_when(lb<0 & ub>0 ~ "not significant",
+                                     TRUE ~ "significant"),
+             p = case_when(sign(estimate)<0 ~ abovezero*2,
+                           sign(estimate)>0 ~ belowzero*2))
+
+
+    observed <- left_join(observed,summary)
   }
+  return(observed)
 }
