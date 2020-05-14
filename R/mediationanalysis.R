@@ -59,9 +59,10 @@ mediationanalysis <- function(y, mediator, x_variables, data, simulate = FALSE, 
 
       B <- simulated_eq3 %>% filter(term == "mediator") %>% pull(estimate)
 
-      output[j, tdi] <- c(simulated_eq2 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate),
-                          simulated_eq3 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate),
-                          (simulated_eq1 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate)) * B)
+      output$total[j] <- simulated_eq2 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate)
+      output$direct[j] <- simulated_eq3 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate)
+      output$indirect[j] <- (simulated_eq1 %>% filter(grepl("x1", term)) %>% slice(1) %>% pull(estimate)) * B
+
       # re-iterate
       if(j %% (numberofsimulations/10) == 0){print(j/numberofsimulations*100)}
     }
