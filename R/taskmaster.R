@@ -8,6 +8,8 @@
 
 taskmaster <- function(df){
 
+  df <- df %>% drop_na(worktimeArray) # otherwise you get errors
+
   taskmaster_columns <- c("worktimeArray", "tasktime", "offTask", "onTask", "totalOffTask", "totalOnTask", "perPagePT", "pageNo")
 
   my_data <-  df %>%
