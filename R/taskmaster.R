@@ -33,7 +33,7 @@ taskmaster <- function(df){
 
     split_variable <- timingArrays %>% select(all_of(paste0("Page_",i))) %>% set_names("v") # which variable do we need to split
 
-    max_number_vars <- max(str_count(split_variable$v, "\\."))+1
+    max_number_vars <- max(str_count(split_variable$v, "\\,"))+1
 
     results <- split_variable %>%
       separate(v, into = paste0("Crossing_",0:max_number_vars), sep = ",", fill = "right") %>%
