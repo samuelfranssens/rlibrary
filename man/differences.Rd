@@ -4,7 +4,7 @@
 \alias{differences}
 \title{A function that takes two means, sd's, n's and gives lower and upper bounds for estimated difference and cohen d}
 \usage{
-differences(mean1, mean2, sd1, sd2, n1, n2, ci = 0.95)
+differences(mean1, mean2, sd1, sd2, n1, n2, alpha = 0.95)
 }
 \arguments{
 \item{mean1}{mean 1}
@@ -18,6 +18,8 @@ differences(mean1, mean2, sd1, sd2, n1, n2, ci = 0.95)
 \item{n1}{sample size 1}
 
 \item{n2}{sample size 2}
+
+\item{alpha}{alpha level}
 }
 \description{
 This function will give you a confidence interval around a difference and its associated cohen's d
@@ -33,6 +35,7 @@ so t = d * 1 / sqrt(1/n1 + 1/n2)
 so d = t * sqrt(1/n1 + 1/n2)
 }
 \examples{
-differences(mean1,mean2,sd1,sd2,n1,n2)
+differences(mean1, mean2, sd1, sd2, n1, n2)
 }
-\keyword{CI}
+\keyword{effect}
+\keyword{size}

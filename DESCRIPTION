@@ -1,8 +1,8 @@
 Package: rlibrary
-Title: library with functions I often use
+Title: library with functions that I often use
 Version: 1.0
-Authors@R: person("Samuel", "Franssens", email = "sfranssens@london.edu", role = c("aut", "cre"))
-Description: functions that help with analyzing simple experiments
+Authors@R: person("Samuel", "Franssens", email = "samuel.franssens@protonmail.com", role = c("aut", "cre"))
+Description: functions
 Depends: R (>= 3.3.2)
 License: What license is it under?
 Encoding: UTF-8

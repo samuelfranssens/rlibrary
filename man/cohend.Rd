@@ -2,9 +2,10 @@
 % Please edit documentation in R/cohend.R
 \name{cohend}
 \alias{cohend}
-\title{A function that will give the confidence interval around Cohen's d.}
+\title{A function that will give the confidence interval around Cohen's d.
+It requires an estimate of d, n1, n2, and whether or not you want the upper/lower bound}
 \usage{
-cohend(d, n1, n2, lu, ci = 0.95)
+cohend(d, n1, n2, alpha = 0.95)
 }
 \arguments{
 \item{d}{estimate of Cohen's d}
@@ -13,16 +14,14 @@ cohend(d, n1, n2, lu, ci = 0.95)
 
 \item{n2}{sample size of cell 2}
 
-\item{lu}{lower or upper bound}
-
-\item{ci}{alpha level}
+\item{alpha}{alpha level}
 }
 \description{
-This function will give you a confidence interval around Cohen's d.
+A function that will give the confidence interval around Cohen's d.
 It requires an estimate of d, n1, n2, and whether or not you want the upper/lower bound
 }
 \examples{
-cohend(d.est, n1, n2, "lwr")
+cohend(d.est, n1, n2)
 }
 \keyword{effect}
 \keyword{size}
