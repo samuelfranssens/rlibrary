@@ -1,8 +1,8 @@
-#' Add theme to ggplot
+#' Add theme to a ggplot2 plot
 #'
 #' @param plot plot
 #' @param SIZE size
-#' @keywords add theme to plot
+#' @keywords add theme to a ggplot2 plot
 #' @export
 #' @examples
 #' plot %>% add_theme()

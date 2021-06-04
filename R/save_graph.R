@@ -3,7 +3,7 @@
 #' @param filename filename
 #' @param h height
 #' @param w width
-#' @keywords save a graph in dimensions that are perfect for powerpoint
+#' @keywords save a graph in dimensions that are perfect for Powerpoint
 #' @export
 
 

@@ -1,5 +1,5 @@
 #' A function that will give the confidence interval around Cohen's d.
-#' It requires an estimate of d, n1, n2, and whether or not you want the upper/lower bound
+#' It requires an estimate of d, n1, n2
 #' @param d estimate of Cohen's d
 #' @param n1 sample size of cell 1
 #' @param n2 sample size of cell 2

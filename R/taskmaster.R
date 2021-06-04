@@ -1,5 +1,5 @@
 #' Taskmaster
-#'
+#' https://journals.sagepub.com/doi/abs/10.1177/2515245919838479
 #' @param df data frame
 #' @keywords taskmaster
 #' @export
