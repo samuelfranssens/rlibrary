@@ -32,12 +32,15 @@ differences <- function(mean1, mean2, sd1, sd2, n1, n2, alpha = 0.95) {
   lwr <- difference + qt((1-alpha)/2, df = df) * sd.pooled * sqrt(1/n1 + 1/n2)
   upr <- difference + qt((1+alpha)/2, df = df) * sd.pooled * sqrt(1/n1 + 1/n2)
 
-  d.est <- (difference) / sd.pooled
-  d.lwr <- cohend(d.est,n1,n2,"lwr")
-  d.upr <- cohend(d.est,n1,n2,"upr")
+  d.est <- difference / sd.pooled
 
-  pvalue <- round(2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df ),4)
+  d.conf <- cohend(d.est,n1,n2) # requires the cohend function
+
+  pvalue <- round(2 * pt( -abs( d.est / sqrt(1/n1+1/n2)  ), df=df), 4)
 
   # return:
-  as_tibble(cbind(difference,lwr,upr,df,pvalue,d.est,d.lwr,d.upr)) %>% magrittr::set_names(c("difference","lwr","upr","df","p","d.est","d.lwr","d.upr"))
+  tibble(difference = difference,
+         lwr = lwr, upr = upr,
+         df = df, p = pvalue,
+         d.est = d.est, d.lwr = d.conf[1], d.upr = d.conf[2])
 }
